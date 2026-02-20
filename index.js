@@ -1,3 +1,4 @@
+console.log("TOKEN:", process.env.TOKEN ? "OK" : "MISSING");
 const {
   Client,
   GatewayIntentBits,
