@@ -1,0 +1,10 @@
+{
+  "name": "feedback-bot",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1"
+  }
+}
