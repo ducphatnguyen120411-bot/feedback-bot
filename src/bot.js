@@ -21,13 +21,15 @@ const client = new Client({
 const TOKEN = process.env.TOKEN;
 const FEEDBACK_CHANNEL_ID = process.env.FEEDBACK_CHANNEL_ID;
 
-let feedbackData = {};
-if (fs.existsSync("./feedback.json")) {
-  feedbackData = JSON.parse(fs.readFileSync("./feedback.json"));
+// Tạo file feedback.json nếu chưa có
+if (!fs.existsSync("./feedback.json")) {
+  fs.writeFileSync("./feedback.json", "{}");
 }
 
+let feedbackData = JSON.parse(fs.readFileSync("./feedback.json"));
+
 client.once("ready", async () => {
-  console.log(`✅ Bot online: ${client.user.tag}`);
+  console.log(`Bot online: ${client.user.tag}`);
 
   await client.application.commands.set([
     new SlashCommandBuilder()
@@ -38,6 +40,7 @@ client.once("ready", async () => {
 
 client.on("interactionCreate", async (interaction) => {
 
+  // /feedback
   if (interaction.isChatInputCommand() && interaction.commandName === "feedback") {
     const modal = new ModalBuilder()
       .setCustomId("orderModal")
@@ -53,6 +56,7 @@ client.on("interactionCreate", async (interaction) => {
     return interaction.showModal(modal);
   }
 
+  // Submit mã đơn
   if (interaction.type === InteractionType.ModalSubmit && interaction.customId === "orderModal") {
     const orderId = interaction.fields.getTextInputValue("orderId");
 
@@ -76,6 +80,7 @@ client.on("interactionCreate", async (interaction) => {
     });
   }
 
+  // Bấm sao
   if (interaction.isButton()) {
     const [, orderId, star] = interaction.customId.split("_");
 
